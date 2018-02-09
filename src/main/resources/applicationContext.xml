@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:task="http://www.springframework.org/schema/task"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+                    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                    http://www.springframework.org/schema/context
+                    http://www.springframework.org/schema/context/spring-context-3.1.xsd
+                    http://www.springframework.org/schema/aop
+                    http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+                    http://www.springframework.org/schema/tx
+                    http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+                    http://www.springframework.org/schema/task
+    				http://www.springframework.org/schema/task/spring-task-3.2.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+    <!-- 开启组件扫描 -->
+    <context:component-scan base-package="com.fruitmall.model"/>
+
+    <!--fruit数据源配置-->
+    <bean id="fruitmall" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.mysql.driverClassName}"/>
+        <property name="jdbcUrl" value="${jdbc.fruitmall.url}"/>
+        <property name="user" value="${jdbc.fruitmall.username}"/>
+        <property name="password" value="${jdbc.fruitmall.password}"/>
+        <property name="minPoolSize" value="${jdbc.fruitmall.minPoolSize}" />
+        <property name="maxPoolSize" value="${jdbc.fruitmall.maxPoolSize}" />
+        <property name="maxIdleTime" value="${jdbc.fruitmall.maxIdleTime}" />
+        <property name="acquireIncrement" value="${jdbc.fruitmall.acquireIncrement}" />
+        <property name="maxStatements" value="${jdbc.fruitmall.maxStatements}" />
+        <property name="initialPoolSize" value="${jdbc.fruitmall.initialPoolSize}" />
+        <property name="idleConnectionTestPeriod" value="${jdbc.fruitmall.idleConnectionTestPeriod}" />
+    </bean>
+
+    <bean id="dataSource_fruitmall" class="com.hongcheng.fruitmall.model.dbutil.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <!--write & read-->
+                <entry key="master" value-ref="fruitmall"/>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="fruitmall"/>
+    </bean>
+    <!-- 注册事务管理 -->
+    <bean id="transactionManager_fruitmall" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource_fruitmall" />
+    </bean>
+
+    <!-- SqlSessionFactory -->
+    <bean id="sqlSessionFactory_fruitmall" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource_fruitmall" />
+    </bean>
+
+    <!--  使用annotation定义事务-->
+    <tx:annotation-driven transaction-manager="transactionManager_fruitmall"  />
+
+    <!-- Mapper扫描 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.hongcheng.fruitmall.mall.dao.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory_fruitmall"/>
+    </bean>
+    <!--@end fruitmall配置结束 -->
+
+    <!--ucenter数据源-->
+    <bean id="ucenter" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.mysql.driverClassName}"/>
+        <property name="jdbcUrl" value="${jdbc.ucenter.url}"/>
+        <property name="user" value="${jdbc.ucenter.username}"/>
+        <property name="password" value="${jdbc.ucenter.password}"/>
+        <property name="minPoolSize" value="${jdbc.ucenter.minPoolSize}" />
+        <property name="maxPoolSize" value="${jdbc.ucenter.maxPoolSize}" />
+        <property name="maxIdleTime" value="${jdbc.ucenter.maxIdleTime}" />
+        <property name="acquireIncrement" value="${jdbc.ucenter.acquireIncrement}" />
+        <property name="maxStatements" value="${jdbc.ucenter.maxStatements}" />
+        <property name="initialPoolSize" value="${jdbc.ucenter.initialPoolSize}" />
+        <property name="idleConnectionTestPeriod" value="${jdbc.ucenter.idleConnectionTestPeriod}" />
+    </bean>
+
+    <bean id="dataSource_ucenter" class="com.hongcheng.fruitmall.model.dbutil.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <!--write & read-->
+                <entry key="master" value-ref="ucenter"/>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="ucenter"/>
+    </bean>
+    <!-- 注册事务管理 -->
+    <bean id="transactionManager_ucenter" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource_ucenter" />
+    </bean>
+
+    <!-- SqlSessionFactory -->
+    <bean id="sqlSessionFactory_ucenter" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource_ucenter" />
+    </bean>
+
+    <!--  使用annotation定义事务-->
+    <tx:annotation-driven transaction-manager="transactionManager_ucenter"  />
+
+    <!-- Mapper扫描 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.hongcheng.fruitmall.ucenter.dao.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory_ucenter"/>
+    </bean>
+    <!-- @end ucenter配置结束-->
+
+    <!-- ugc库配置 -->
+    <bean id="ugc" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.mysql.driverClassName}"/>
+        <property name="jdbcUrl" value="${jdbc.ugc.url}"/>
+        <property name="user" value="${jdbc.ugc.username}"/>
+        <property name="password" value="${jdbc.ugc.password}"/>
+        <property name="minPoolSize" value="${jdbc.ugc.minPoolSize}" />
+        <property name="maxPoolSize" value="${jdbc.ugc.maxPoolSize}" />
+        <property name="maxIdleTime" value="${jdbc.ugc.maxIdleTime}" />
+        <property name="acquireIncrement" value="${jdbc.ugc.acquireIncrement}" />
+        <property name="maxStatements" value="${jdbc.ugc.maxStatements}" />
+        <property name="initialPoolSize" value="${jdbc.ugc.initialPoolSize}" />
+        <property name="idleConnectionTestPeriod" value="${jdbc.ugc.idleConnectionTestPeriod}" />
+    </bean>
+
+    <bean id="dataSource_ugc" class="com.hongcheng.fruitmall.model.dbutil.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <!--write & read-->
+                <entry key="master" value-ref="ugc"/>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="ugc"/>
+    </bean>
+    <!-- 注册事务管理 -->
+    <bean id="transactionManager_ugc" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource_ugc" />
+    </bean>
+
+    <!-- SqlSessionFactory -->
+    <bean id="sqlSessionFactory_ugc" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource_ugc" />
+    </bean>
+
+    <!--  使用annotation定义事务-->
+    <tx:annotation-driven transaction-manager="transactionManager_ugc"  />
+
+    <!-- Mapper扫描 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.fruitmall.model.ugc.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory_ugc"/>
+    </bean>
+    <!--@end ugc配置结束 -->
+
+    <!--mailgun 配置 -->
+    <bean id="mailgun" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.mysql.driverClassName}"/>
+        <property name="jdbcUrl" value="${jdbc.mailgun.url}"/>
+        <property name="user" value="${jdbc.mailgun.username}"/>
+        <property name="password" value="${jdbc.mailgun.password}"/>
+        <property name="minPoolSize" value="${jdbc.mailgun.minPoolSize}" />
+        <property name="maxPoolSize" value="${jdbc.mailgun.maxPoolSize}" />
+        <property name="maxIdleTime" value="${jdbc.mailgun.maxIdleTime}" />
+        <property name="acquireIncrement" value="${jdbc.mailgun.acquireIncrement}" />
+        <property name="maxStatements" value="${jdbc.mailgun.maxStatements}" />
+        <property name="initialPoolSize" value="${jdbc.mailgun.initialPoolSize}" />
+        <property name="idleConnectionTestPeriod" value="${jdbc.mailgun.idleConnectionTestPeriod}" />
+    </bean>
+
+    <bean id="dataSource_mailgun" class="com.hongcheng.fruitmall.model.dbutil.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <!--write & read-->
+                <entry key="master" value-ref="mailgun"/>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="mailgun"/>
+    </bean>
+    <!-- 注册事务管理 -->
+    <bean id="transactionManager_mailgun" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource_mailgun" />
+    </bean>
+
+    <!-- SqlSessionFactory -->
+    <bean id="sqlSessionFactory_mailgun" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource_mailgun" />
+    </bean>
+
+    <!--  使用annotation定义事务-->
+    <tx:annotation-driven transaction-manager="transactionManager_mailgun"  />
+
+    <!-- Mapper扫描 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.fruitmall.model.mailgun.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory_mailgun"/>
+    </bean>
+
+    <!-- 配置数据库注解aop -->
+    <bean id="dataSourceAspectModel" class="com.hongcheng.fruitmall.model.dbutil.DataSourceAspectModel" />
+
+    <aop:config>
+        <aop:pointcut id="MapperMethods1" expression="execution(* com.fruitmall.*.*.mapper.*.*(..))"/>
+        <aop:advisor pointcut-ref="MapperMethods1" advice-ref="dataSourceAspectModel"/>
+    </aop:config>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.hongcheng.fruitmall.fmsdk.UserInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
+</beans>
