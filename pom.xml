@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.hongcheng</groupId>
-	<artifactId>fruitMall</artifactId>
+	<artifactId>fruitmall</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -63,12 +63,12 @@
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
-			<version>3.4.1</version>
+			<version>3.4.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis-spring</artifactId>
-			<version>1.3.0</version>
+			<version>1.3.1</version>
 		</dependency>
 
 		<!--mysql -->
@@ -76,6 +76,13 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.5.2</version>
+		</dependency>
+
 
 		<!--redis -->
 		<dependency>
@@ -130,11 +137,18 @@
 		</plugins>
 		<resources>
 			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.properties</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+			<resource>
 				<directory>${basedir}/src/main/java</directory>
 				<includes>
 					<include>**/*.xml</include>
 				</includes>
-				<filtering>false</filtering>
 			</resource>
 		</resources>
 	</build>

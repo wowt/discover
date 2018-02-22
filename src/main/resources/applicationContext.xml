@@ -19,9 +19,6 @@
     				http://www.springframework.org/schema/task/spring-task-3.2.xsd
     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 
-    <!-- 开启组件扫描 -->
-    <context:component-scan base-package="com.fruitmall.model"/>
-
     <!--fruit数据源配置-->
     <bean id="fruitmall" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="${jdbc.mysql.driverClassName}"/>
@@ -37,7 +34,7 @@
         <property name="idleConnectionTestPeriod" value="${jdbc.fruitmall.idleConnectionTestPeriod}" />
     </bean>
 
-    <bean id="dataSource_fruitmall" class="com.hongcheng.fruitmall.model.dbutil.DynamicDataSource">
+    <bean id="dataSource_fruitmall" class="com.hongcheng.fruitmall.common.util.dbutil.DynamicDataSource">
         <property name="targetDataSources">
             <map key-type="java.lang.String">
                 <!--write & read-->
@@ -81,7 +78,7 @@
         <property name="idleConnectionTestPeriod" value="${jdbc.ucenter.idleConnectionTestPeriod}" />
     </bean>
 
-    <bean id="dataSource_ucenter" class="com.hongcheng.fruitmall.model.dbutil.DynamicDataSource">
+    <bean id="dataSource_ucenter" class="com.hongcheng.fruitmall.common.util.dbutil.DynamicDataSource">
         <property name="targetDataSources">
             <map key-type="java.lang.String">
                 <!--write & read-->
@@ -125,7 +122,7 @@
         <property name="idleConnectionTestPeriod" value="${jdbc.ugc.idleConnectionTestPeriod}" />
     </bean>
 
-    <bean id="dataSource_ugc" class="com.hongcheng.fruitmall.model.dbutil.DynamicDataSource">
+    <bean id="dataSource_ugc" class="com.hongcheng.fruitmall.common.util.dbutil.DynamicDataSource">
         <property name="targetDataSources">
             <map key-type="java.lang.String">
                 <!--write & read-->
@@ -169,7 +166,7 @@
         <property name="idleConnectionTestPeriod" value="${jdbc.mailgun.idleConnectionTestPeriod}" />
     </bean>
 
-    <bean id="dataSource_mailgun" class="com.hongcheng.fruitmall.model.dbutil.DynamicDataSource">
+    <bean id="dataSource_mailgun" class="com.hongcheng.fruitmall.common.util.dbutil.DynamicDataSource">
         <property name="targetDataSources">
             <map key-type="java.lang.String">
                 <!--write & read-->
@@ -198,19 +195,11 @@
     </bean>
 
     <!-- 配置数据库注解aop -->
-    <bean id="dataSourceAspectModel" class="com.hongcheng.fruitmall.model.dbutil.DataSourceAspectModel" />
+    <bean id="dataSourceAspectModel" class="com.hongcheng.fruitmall.common.util.dbutil.DataSourceAspectModel" />
 
     <aop:config>
-        <aop:pointcut id="MapperMethods1" expression="execution(* com.fruitmall.*.*.mapper.*.*(..))"/>
+        <aop:pointcut id="MapperMethods1" expression="execution(* com.hongcheng.fruitmall.*.*.mapper.*.*(..))"/>
         <aop:advisor pointcut-ref="MapperMethods1" advice-ref="dataSourceAspectModel"/>
     </aop:config>
-
-    <mvc:interceptors>
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <bean class="com.hongcheng.fruitmall.fmsdk.UserInterceptor"></bean>
-        </mvc:interceptor>
-    </mvc:interceptors>
-
 
 </beans>
