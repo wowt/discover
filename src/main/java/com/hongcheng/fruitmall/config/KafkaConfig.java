@@ -11,13 +11,13 @@ import java.util.Properties;
 /**
  * Kafka config
  */
-//@SpringBootConfiguration
+@SpringBootConfiguration
 public class KafkaConfig {
 
-   // @Value("${kafka.server}")
+    @Value("${kafka.server}")
     private String server;
 
-   // @Bean("kafkaEventProducer")
+    @Bean("kafkaEventProducer")
     public KafkaProducer<String,String> kafkaEventProducer() {
         Properties kafkaConfig = new Properties();
         kafkaConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,server);
