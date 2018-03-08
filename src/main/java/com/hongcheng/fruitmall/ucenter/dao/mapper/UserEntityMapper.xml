@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hongcheng.fruitmall.ucenter.dao.mapper.UserEntityMapper">
+    <sql id="Base_column_List">
+        userId,userState,email,realname,imgUrl,level,userSex,score,borth
+    </sql>
+    <select id="selectById" resultType="com.hongcheng.fruitmall.ucenter.entity.UserEntity">
+        SELECT
+        <include refid="Base_column_List"/>
+        FROM user
+        WHERE userId=#{userId}
+    </select>
+    <insert id="insert">
+        INSERT INTO user
+        (userState,email,realname,imgUrl,level,userSex,score,borth)
+        VALUES
+        (#{userState},#{email},#{realname},#{imgUrl},#{level},#{userSex},#{score},#{borth})
+    </insert>
+
+</mapper>
