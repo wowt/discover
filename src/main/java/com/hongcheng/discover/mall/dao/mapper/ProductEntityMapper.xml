@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hongcheng.discover.mall.dao.mapper.ProductEntityMapper">
+    <sql id="Base_column_List">
+        productId,productName,productPlace,productState,productType,
+        productImg,tips,price,dealPrice,score,startTime,endTime,introduce
+    </sql>
+    <select id="selectById" resultType="com.hongcheng.discover.mall.entity.ProductEntity">
+        SELECT
+        <include refid="Base_column_List"/>
+        FROM product
+        <where>
+            productId=#{productId}
+        </where>
+    </select>
+    <insert id="insert">
+        INSERT INTO product
+        (productName,productPlace,productState,productType,
+        productImg,tips,price,dealPrice,score,startTime,endTime,introduce)
+        VALUES
+        (#{productName},#{productPlace},#{productState},#{productType},
+        #{productImg},#{tips},#{price},#{dealPrice},#{score},#{startTime},#{endTime},#{introduce})
+    </insert>
+    <update id="update">
+        update product
+        <set>
+            <if test="productName != null">
+                productName=#{productName},
+            </if>
+            <if test="productPlace != null">
+                productPlace=#{productPlace},
+            </if>
+            <if test="productState != null">
+                productState=#{productState},
+            </if>
+            <if test="productType != null">
+                productType=#{productType},
+            </if>
+            <if test="productImg != null">
+                productImg=#{productImg},
+            </if>
+            <if test="tips != null">
+                tips=#{tips},
+            </if>
+            <if test="price != null">
+                price=#{price},
+            </if>
+            <if test="dealPrice != null">
+                dealPrice=#{dealPrice},
+            </if>
+            <if test="score != null">
+                score=#{score},
+            </if>
+            <if test="startTime != null">
+                startTime=#{startTime},
+            </if>
+            <if test="endTime != null">
+                endTime=#{endTime},
+            </if>
+            <if test="introduce != null">
+                introduce=#{introduce},
+            </if>
+        </set>
+        where productId=#{productId}
+    </update>
+</mapper>
